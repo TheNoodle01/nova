@@ -1,21 +1,23 @@
 from flask import Flask, request, jsonify
 import requests
 import pyttsx3
-import speech_recognition as sr
 import os
+import speech_recognition as sr
+import subprocess
 
 app = Flask(__name__)
 
-# Initialize TTS engine (eSpeak)
+# Initialize eSpeak engine for Text-to-Speech (TTS)
 engine = pyttsx3.init()
 
-# Google Speech Recognition to capture voice input
+# Function to recognize speech using eSpeak and SpeechRecognition
 def recognize_speech():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening for your question...")
         audio = recognizer.listen(source)
         try:
+            # Use Google Web Speech API for speech-to-text conversion
             text = recognizer.recognize_google(audio)
             print(f"You said: {text}")
             return text
@@ -24,7 +26,7 @@ def recognize_speech():
         except sr.RequestError:
             return "Sorry, I'm having trouble connecting to the service."
 
-# Function to convert text to speech
+# Function to convert text to speech using eSpeak (through pyttsx3)
 def speak(text):
     engine.say(text)
     engine.runAndWait()
@@ -56,3 +58,4 @@ def ask():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
+    
