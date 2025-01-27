@@ -1,23 +1,20 @@
 from flask import Flask, request, jsonify
 import requests
 import pyttsx3
-import os
 import speech_recognition as sr
-import subprocess
+import os
 
+# Initialize Flask app and eSpeak TTS engine
 app = Flask(__name__)
-
-# Initialize eSpeak engine for Text-to-Speech (TTS)
 engine = pyttsx3.init()
 
-# Function to recognize speech using eSpeak and SpeechRecognition
+# Function to recognize speech using Google Speech Recognition
 def recognize_speech():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening for your question...")
         audio = recognizer.listen(source)
         try:
-            # Use Google Web Speech API for speech-to-text conversion
             text = recognizer.recognize_google(audio)
             print(f"You said: {text}")
             return text
@@ -26,12 +23,12 @@ def recognize_speech():
         except sr.RequestError:
             return "Sorry, I'm having trouble connecting to the service."
 
-# Function to convert text to speech using eSpeak (through pyttsx3)
+# Function to convert text to speech using eSpeak
 def speak(text):
     engine.say(text)
     engine.runAndWait()
 
-# Function to call GPT-Neo model
+# Function to call the GPT-Neo model (or similar) via API
 def ask_ai(question):
     API_URL = "https://your-app-name.railway.app/ask"  # Replace with your Railway API URL
     data = {
@@ -43,6 +40,7 @@ def ask_ai(question):
     else:
         return "Error: Unable to get response from AI."
 
+# Define routes for the web app
 @app.route('/')
 def home():
     return "Welcome to the Voice-Activated AI!"
@@ -58,4 +56,4 @@ def ask():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
-    
+
