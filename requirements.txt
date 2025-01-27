@@ -1,4 +1,4 @@
-Flask
-pyttsx3
-SpeechRecognition
-requests
+Flask==2.0.3
+pyttsx3==2.90
+speechrecognition==3.8.1
+requests==2.26.0
